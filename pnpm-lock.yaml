@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@badgateway/oauth2-client':
+        specifier: ^3.2.0
+        version: 3.2.0
       unocss:
         specifier: ^66.1.2
         version: 66.1.2(postcss@8.5.3)(vite@6.3.5(@types/node@22.15.21)(jiti@2.4.2)(yaml@2.8.0))(vue@3.5.14(typescript@5.8.3))
@@ -275,6 +278,10 @@ packages:
   '@babel/types@7.27.1':
     resolution: {integrity: sha512-+EzkxvLNfiUeKMgy/3luqfsCWFRXLb7U6wNQTk60tovuckwB15B191tJWvpp4HjiQWdJkCxO3Wbvc6jlk3Xb2Q==}
     engines: {node: '>=6.9.0'}
+
+  '@badgateway/oauth2-client@3.2.0':
+    resolution: {integrity: sha512-EHsoV6oLHot7HeYkIoSxCZApNgBjwNo1OTV9kXIDnmijGAshlVkJreVAAtexFn+sfDKPE0JW5SCPYJV1y4IoMg==}
+    engines: {node: '>= 18'}
 
   '@clack/core@0.4.2':
     resolution: {integrity: sha512-NYQfcEy8MWIxrT5Fj8nIVchfRFA26yYKJcvBS7WlUIlw2OmQOY9DhGGXMovyI5J5PpxrCPGkgUi207EBrjpBvg==}
@@ -3266,6 +3273,8 @@ snapshots:
     dependencies:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.27.1
+
+  '@badgateway/oauth2-client@3.2.0': {}
 
   '@clack/core@0.4.2':
     dependencies:

@@ -20,4 +20,13 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
+  server: {
+    host: '127.0.0.1',
+    port: 8888,
+    https: {
+      key: 'certs/127.0.0.1-key.pem',
+      cert: 'certs/127.0.0.1.pem',
+    },
+
+  },
 });

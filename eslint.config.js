@@ -10,6 +10,8 @@ export default antfu({
 
     // todo: Activate this if .env becomes important
     // 'node/no-process-env': ['error'],
+
+    '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
   },
   stylistic: {
     semi: true,
