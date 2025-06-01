@@ -8,9 +8,9 @@ importers:
 
   .:
     dependencies:
-      '@badgateway/oauth2-client':
-        specifier: ^3.2.0
-        version: 3.2.0
+      '@spotify/web-api-ts-sdk':
+        specifier: ^1.2.0
+        version: 1.2.0
       unocss:
         specifier: ^66.1.2
         version: 66.1.2(postcss@8.5.3)(vite@6.3.5(@types/node@22.15.21)(jiti@2.4.2)(yaml@2.8.0))(vue@3.5.14(typescript@5.8.3))
@@ -278,10 +278,6 @@ packages:
   '@babel/types@7.27.1':
     resolution: {integrity: sha512-+EzkxvLNfiUeKMgy/3luqfsCWFRXLb7U6wNQTk60tovuckwB15B191tJWvpp4HjiQWdJkCxO3Wbvc6jlk3Xb2Q==}
     engines: {node: '>=6.9.0'}
-
-  '@badgateway/oauth2-client@3.2.0':
-    resolution: {integrity: sha512-EHsoV6oLHot7HeYkIoSxCZApNgBjwNo1OTV9kXIDnmijGAshlVkJreVAAtexFn+sfDKPE0JW5SCPYJV1y4IoMg==}
-    engines: {node: '>= 18'}
 
   '@clack/core@0.4.2':
     resolution: {integrity: sha512-NYQfcEy8MWIxrT5Fj8nIVchfRFA26yYKJcvBS7WlUIlw2OmQOY9DhGGXMovyI5J5PpxrCPGkgUi207EBrjpBvg==}
@@ -754,6 +750,9 @@ packages:
   '@sindresorhus/merge-streams@4.0.0':
     resolution: {integrity: sha512-tlqY9xq5ukxTUZBmoOp+m61cqwQD5pHJtFY3Mn8CA8ps6yghLH/Hw8UPdqg4OLmFW3IFlcXnQNmo/dh8HzXYIQ==}
     engines: {node: '>=18'}
+
+  '@spotify/web-api-ts-sdk@1.2.0':
+    resolution: {integrity: sha512-JUaebva3Ohwo5I5tuTqyW/FKGOMbb40YevJMySAOINRxP7qQ/AMjBzfJx0zeO6yS+wAPfQSoGNsZaUggHw8vsA==}
 
   '@stylistic/eslint-plugin@4.4.0':
     resolution: {integrity: sha512-bIh/d9X+OQLCAMdhHtps+frvyjvAM4B1YlSJzcEEhl7wXLIqPar3ngn9DrHhkBOrTA/z9J0bUMtctAspe0dxdQ==}
@@ -3274,8 +3273,6 @@ snapshots:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.27.1
 
-  '@badgateway/oauth2-client@3.2.0': {}
-
   '@clack/core@0.4.2':
     dependencies:
       picocolors: 1.1.1
@@ -3648,6 +3645,8 @@ snapshots:
   '@sec-ant/readable-stream@0.4.1': {}
 
   '@sindresorhus/merge-streams@4.0.0': {}
+
+  '@spotify/web-api-ts-sdk@1.2.0': {}
 
   '@stylistic/eslint-plugin@4.4.0(eslint@9.27.0(jiti@2.4.2))(typescript@5.8.3)':
     dependencies:

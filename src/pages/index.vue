@@ -1,32 +1,69 @@
 <script setup lang="ts">
-import { inject } from 'vue';
+import type { Page, SimplifiedPlaylist } from '@spotify/web-api-ts-sdk';
 
-import { authClientKey } from '@/types/InjectionKeys';
+import { ref } from 'vue';
 
-const { client } = inject(authClientKey)!;
+import { useSpotify } from '@/composables/useSpotify';
 
-async function loginWithSpotify() {
-  const authorizationUrl = await client.authorizationCode.getAuthorizeUri({
-    // URL in the app that the user should get redirected to after authenticating
-    redirectUri: import.meta.env.VITE_SPOTIFY_REDIRECT_URI,
+const myPlaylists = ref<Page<SimplifiedPlaylist>>();
 
-    // Optional string that can be sent along to the auth server. This value will
-    // be sent along with the redirect back to the app verbatim.
-    state: 'some-string',
+let currentPlaylists: SimplifiedPlaylist[] = [];
 
-    // codeVerifier,
+const { spotifySdk } = useSpotify();
 
-    scope: import.meta.env.VITE_SPOTIFY_SCOPE.split(','),
+async function getMyPlaylists() {
+  myPlaylists.value = await spotifySdk.currentUser.playlists.playlists();
+  currentPlaylists = myPlaylists.value?.items;
+}
 
+function sortByName() {
+  currentPlaylists = currentPlaylists.sort((a, b) => a.name.localeCompare(b.name));
+}
+
+function sortByTracks() {
+  currentPlaylists = currentPlaylists.sort((a, b) => {
+    const aTracks = a.tracks?.total || 0;
+    const bTracks = b.tracks?.total || 0;
+
+    return aTracks - bTracks;
   });
-  window.location.href = authorizationUrl;
 }
 </script>
 
 <template>
   <div>
-    <button @click="loginWithSpotify">
-      Login with Spotify
+    <p>This will only get the first page available for now</p>
+    <button @click="getMyPlaylists">
+      Get my playlists
     </button>
+
+    <button @click="sortByName">
+      Sort by name
+    </button>
+
+    <button @click="sortByTracks">
+      Sort by number of tracks
+    </button>
+
+    <!-- <pre>
+    {{ JSON.stringify(myPlaylists, null, 2) }}
+  </pre> -->
+
+    <div v-if="myPlaylists">
+      <h2>My Playlists</h2>
+      <ul>
+        <li v-for="playlist in currentPlaylists" :key="playlist.id" my-4 flex gap-2>
+          <img class="h-[3rem] w-[3rem]" :src="playlist.images?.[0]?.url">
+          <div flex flex-col justify-center>
+            <p text-green>
+              {{ playlist.name }}
+            </p>
+            <p>
+              {{ playlist.tracks?.total }} tracks
+            </p>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
