@@ -1,32 +1,48 @@
 <script setup lang="ts">
-import type { Page, SimplifiedPlaylist } from '@spotify/web-api-ts-sdk';
+import { computed, ref } from 'vue';
 
-import { ref } from 'vue';
+import { useGetSpotifyPlaylists } from '@/queries/useGetSpotifyPlaylists';
 
-import { useSpotify } from '@/composables/useSpotify';
+const {
+  data: playlistsData,
+  isLoading,
+  refresh,
+  error,
+} = useGetSpotifyPlaylists();
 
-const myPlaylists = ref<Page<SimplifiedPlaylist>>();
+const sortType = ref<'name' | 'tracks' | 'none'>('none');
 
-let currentPlaylists: SimplifiedPlaylist[] = [];
+const myPlaylists = computed(() => {
+  const items = playlistsData.value?.items || [];
 
-const { spotifySdk } = useSpotify();
+  if (sortType.value === 'name') {
+    return [...items].sort((a, b) => a.name.localeCompare(b.name));
+  }
+  else if (sortType.value === 'tracks') {
+    return [...items].sort((a, b) => {
+      const aTracks = a.tracks?.total || 0;
+      const bTracks = b.tracks?.total || 0;
+      return aTracks - bTracks;
+    });
+  }
+
+  return items;
+});
 
 async function getMyPlaylists() {
-  myPlaylists.value = await spotifySdk.currentUser.playlists.playlists();
-  currentPlaylists = myPlaylists.value?.items;
+  await refresh();
 }
 
 function sortByName() {
-  currentPlaylists = currentPlaylists.sort((a, b) => a.name.localeCompare(b.name));
+  sortType.value = 'name';
 }
 
 function sortByTracks() {
-  currentPlaylists = currentPlaylists.sort((a, b) => {
-    const aTracks = a.tracks?.total || 0;
-    const bTracks = b.tracks?.total || 0;
+  sortType.value = 'tracks';
+}
 
-    return aTracks - bTracks;
-  });
+function clearSort() {
+  sortType.value = 'none';
 }
 </script>
 
@@ -45,17 +61,29 @@ function sortByTracks() {
       Sort by number of tracks
     </button>
 
-    <!-- <pre>
-    {{ JSON.stringify(myPlaylists, null, 2) }}
-  </pre> -->
+    <button @click="clearSort">
+      Clear sort
+    </button>
 
-    <div v-if="myPlaylists">
-      <h2>My Playlists</h2>
+    <div v-if="isLoading">
+      Fetching user's playlists
+    </div>
+
+    <div v-if="error">
+      Error: {{ error }}
+    </div>
+
+    <div v-if="myPlaylists.length > 0">
+      <h2>My Playlists ({{ myPlaylists.length }} total)</h2>
+      <p v-if="sortType !== 'none'">
+        Sorted by: {{ sortType }}
+      </p>
+
       <ul>
-        <li v-for="playlist in currentPlaylists" :key="playlist.id" my-4 flex gap-2>
-          <img class="h-[3rem] w-[3rem]" :src="playlist.images?.[0]?.url">
-          <div flex flex-col justify-center>
-            <p text-green>
+        <li v-for="playlist in myPlaylists" :key="playlist.id" class="my-4 flex gap-2">
+          <img class="h-[3rem] w-[3rem]" :src="playlist.images?.[0]?.url" :alt="playlist.name">
+          <div class="flex flex-col justify-center">
+            <p class="text-green">
               {{ playlist.name }}
             </p>
             <p>
@@ -64,6 +92,10 @@ function sortByTracks() {
           </div>
         </li>
       </ul>
+    </div>
+
+    <div v-else-if="!isLoading && !error">
+      No playlists found. Click "Get my playlists" to fetch them.
     </div>
   </div>
 </template>
