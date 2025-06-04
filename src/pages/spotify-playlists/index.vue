@@ -1,14 +1,9 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { computed, reactive, ref } from 'vue';
 
 import { useGetSpotifyPlaylists } from '@/queries/useGetSpotifyPlaylists';
 
-const {
-  data: playlistsData,
-  isLoading,
-  refresh,
-  error,
-} = useGetSpotifyPlaylists();
+const playlistsQuery = reactive(useGetSpotifyPlaylists());
 
 type SortType = 'none' | 'name' | 'tracks';
 
@@ -17,8 +12,8 @@ const sortBy = ref<SortType>('none');
 /**
  * A derived value that allows to sort the playlists
  */
-const myPlaylists = computed(() => {
-  const items = playlistsData.value?.items || [];
+const playlists = computed(() => {
+  const items = playlistsQuery.data?.items || [];
 
   if (sortBy.value === 'name') {
     return [...items].sort((a, b) => a.name.localeCompare(b.name));
@@ -35,7 +30,7 @@ const myPlaylists = computed(() => {
 });
 
 async function getMyPlaylists() {
-  await refresh();
+  await playlistsQuery.refresh();
 }
 
 function sortByName() {
@@ -73,36 +68,49 @@ function clearSort() {
       </button>
     </section>
 
-    <div v-if="isLoading">
+    <div v-if="playlistsQuery.isLoading">
       Fetching user's playlists
     </div>
 
-    <div v-if="error">
-      Error: {{ error }}
+    <div v-if="playlistsQuery.error">
+      Error: {{ playlistsQuery.error }}
     </div>
 
-    <div v-if="myPlaylists.length > 0">
-      <h2>My Playlists ({{ myPlaylists.length }} total)</h2>
+    <div v-if="playlists.length > 0">
+      <h2>My Playlists ({{ playlists.length }} total)</h2>
       <p v-if="sortBy !== 'none'">
         Sorted by: {{ sortBy }}
       </p>
 
-      <ul>
-        <li v-for="playlist in myPlaylists" :key="playlist.id" class="my-4 flex gap-2">
-          <img class="h-[3rem] w-[3rem]" :src="playlist.images?.[0]?.url" :alt="playlist.name">
-          <div class="flex flex-col justify-center">
-            <p class="text-green">
+      <ul flex flex-wrap gap-4>
+        <li
+          v-for="playlist in playlists" :key="playlist.id"
+          class="p-4 border-1 border-neutral-700 rounded-md flex gap-2 min-w-[20rem]"
+        >
+          <img class="h-auto w-12 object-contain" :src="playlist.images?.[0]?.url" :alt="playlist.name">
+          <div lex flex-col justify-center>
+            <p text-green>
               {{ playlist.name }}
             </p>
             <p>
               {{ playlist.tracks?.total }} tracks
             </p>
+            <RouterLink
+              :to="{
+                name: '/spotify-playlists/[id]',
+                params: {
+                  id: playlist.id,
+                },
+              }"
+            >
+              {{ playlist.id }}
+            </RouterLink>
           </div>
         </li>
       </ul>
     </div>
 
-    <div v-else-if="!isLoading && !error">
+    <div v-else-if="!playlistsQuery.isLoading && !playlistsQuery.error">
       No playlists found. Click "Get my playlists" to fetch them.
     </div>
   </div>

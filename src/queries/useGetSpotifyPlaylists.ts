@@ -1,8 +1,6 @@
 import { defineQuery, useQuery } from '@pinia/colada';
 
-import { useSpotify } from '@/composables/useSpotify';
-
-const { spotifySdk } = useSpotify();
+import { spotifySdk } from '@/lib/spotifyClient';
 
 export const useGetSpotifyPlaylists = defineQuery(() => {
   return useQuery({
