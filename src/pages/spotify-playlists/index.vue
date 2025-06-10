@@ -1,8 +1,14 @@
 <script lang="ts" setup>
 import { computed, reactive, ref } from 'vue';
 
+import { spotifySdk } from '@/lib/spotifyClient';
 import { useGetSpotifyPlaylists } from '@/queries/useGetSpotifyPlaylists';
+import router from '@/router';
 
+// this triggers spotify log in
+// because the query is using the spotify sdk
+// so when the sdk doesn't find a user,
+// it will redirect to the login page
 const playlistsQuery = reactive(useGetSpotifyPlaylists());
 
 type SortType = 'none' | 'name' | 'tracks';
@@ -44,6 +50,11 @@ function sortByTracks() {
 function clearSort() {
   sortBy.value = 'none';
 }
+
+function logOut() {
+  spotifySdk.logOut();
+  router.push('/');
+}
 </script>
 
 <template>
@@ -65,6 +76,10 @@ function clearSort() {
 
       <button btn @click="clearSort">
         Clear sort
+      </button>
+
+      <button bg-slate btn @click="logOut">
+        Log out Spotify
       </button>
     </section>
 

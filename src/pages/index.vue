@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import SpotifyPlaylists from '../components/SpotifyPlaylists.vue';
 </script>
 
 <template>
-  <SpotifyPlaylists />
+  <h1>Home</h1>
+
+  <RouterLink to="/spotify-playlists" text-green hover:text-green-300>
+    Spotify Playlists
+  </RouterLink>
 </template>

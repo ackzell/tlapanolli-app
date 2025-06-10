@@ -14,7 +14,7 @@ interface ImportMetaEnv {
   readonly VITE_SPOTIFY_AUTHORIZATION_ENDPOINT: string;
   readonly VITE_SPOTIFY_TOKEN_ENDPOINT: string;
   readonly VITE_SPOTIFY_REDIRECT_URI: string;
-  readonly VITE_SPOTIFY_SCOPE: string;
+  readonly VITE_SPOTIFY_SCOPES: string;
   readonly VITE_TIDAL_CLIENT_ID: string;
   readonly VITE_TIDAL_SECRET_ID: string;
   readonly VITE_TIDAL_REDIRECT_URI: string;
