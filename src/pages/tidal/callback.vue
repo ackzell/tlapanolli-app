@@ -24,6 +24,8 @@ onMounted(async () => {
 
   console.log('credentials', await credentialsProvider.getCredentials());
 
+  localStorage.setItem('tidal-user-logged-in', 'true');
+
   router.push('/tidal');
 });
 </script>
