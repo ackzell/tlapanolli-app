@@ -7,4 +7,8 @@
   <RouterLink to="/spotify-playlists" text-green hover:text-green-300>
     Spotify Playlists
   </RouterLink>
+
+  <RouterLink to="/tidal" text-gray hover:text-gray-300>
+    Tidal Stuff
+  </RouterLink>
 </template>

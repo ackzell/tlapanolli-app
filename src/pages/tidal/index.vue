@@ -1,28 +1,17 @@
 <script setup lang="ts">
-import { createAPIClient } from '@tidal-music/api';
-import { credentialsProvider, init, initializeLogin } from '@tidal-music/auth';
+import { credentialsProvider, initializeLogin, logout } from '@tidal-music/auth';
 import { onMounted, ref } from 'vue';
+
+import { initTidal } from '@/lib/tidalClient';
 
 const user = ref();
 
+type TidalAPIClient = Awaited<ReturnType<typeof initTidal>>;
+
+let apiClient: TidalAPIClient;
+
 onMounted(async () => {
-  await init({
-    clientId: import.meta.env.VITE_TIDAL_CLIENT_ID,
-    clientSecret: import.meta.env.VITE_TIDAL_SECRET_ID,
-    credentialsStorageKey: 'tidal-credentials',
-    scopes: [
-      'user.read',
-      'collection.read',
-      'search.read',
-      'playlists.write',
-      'playlists.read',
-      'entitlements.read',
-      'collection.write',
-      'recommendations.read',
-      'playback',
-      'search.write',
-    ],
-  });
+  apiClient = await initTidal();
 });
 
 async function loginWithTidal() {
@@ -33,23 +22,59 @@ async function loginWithTidal() {
   window.location.href = redirectUri;
 }
 
-async function getMyUser() {
-  const apiClient = createAPIClient(credentialsProvider);
+async function isUserLoggedIn() {
+  try {
+    console.log('credentials', await credentialsProvider.getCredentials());
+  } catch (error) {
+    console.error('NOT LOGGED IN YET', error);
+  }
+  
+}
 
-  user.value = await apiClient.GET('/users/me');
+async function getMyUser() {
+
+  const currentUser = await apiClient.GET('/users/me');
+
+  console.log('current user', currentUser);
+
+  user.value = currentUser;
+  // user.value = await apiClient.GET('/playlists/me', {
+  //   params: {
+  //     query: {
+  //       countryCode: 'MX',
+  //       locale: 'es_MX',
+  //       include: ['artist', 'album', 'track'],
+  //     }
+  //   },
+  // });
+}
+
+async function logMeOut() {
+  logout();
 }
 </script>
 
 <template>
   <h1>Tidal</h1>
 
-  <button btn @click="loginWithTidal">
-    Login with Tidal
-  </button>
+  <section flex gap-2>
 
-  <button btn @click="getMyUser">
-    Get my user
-  </button>
+    <button btn @click="isUserLoggedIn">
+      Is user logged in?
+    </button>
+
+    <button btn @click="loginWithTidal">
+      Login with Tidal
+    </button>
+
+    <button btn @click="logMeOut">
+      Log out Tidal
+    </button>
+
+    <button btn @click="getMyUser">
+      Get my user
+    </button>
+  </section>
 
   <pre>{{ user }}</pre>
 </template>

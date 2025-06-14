@@ -4,28 +4,13 @@ import { credentialsProvider, finalizeLogin, init } from '@tidal-music/auth';
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 
+import { initTidal } from '@/lib/tidalClient';
 import router from '@/router';
 
 const route = useRoute();
 
 onMounted(async () => {
-  await init({
-    clientId: import.meta.env.VITE_TIDAL_CLIENT_ID,
-    clientSecret: import.meta.env.VITE_TIDAL_SECRET_ID,
-    credentialsStorageKey: 'tidal-credentials',
-    scopes: [
-      'user.read',
-      'collection.read',
-      'search.read',
-      'playlists.write',
-      'playlists.read',
-      'entitlements.read',
-      'collection.write',
-      'recommendations.read',
-      'playback',
-      'search.write',
-    ],
-  });
+  await initTidal();
 
   // const queryString = window.location.search;
 
@@ -37,10 +22,12 @@ onMounted(async () => {
 
   await finalizeLogin(queryString);
 
+  console.log('credentials', await credentialsProvider.getCredentials());
+
   router.push('/tidal');
 });
 </script>
 
 <template>
-  <h1>Tidal Callback</h1>
+  <h1>Bringing you in from tidal...</h1>
 </template>
