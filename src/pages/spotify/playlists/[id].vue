@@ -4,7 +4,7 @@ import { useRoute } from 'vue-router';
 
 import { useGetSpotifyPlaylistById } from '@/queries/useGetSpotifyPlaylistById';
 
-const route = useRoute('/spotify-playlists/[id]');
+const route = useRoute('/spotify/playlists/[id]');
 const id = route.params.id;
 
 const playlistQuery = reactive(useGetSpotifyPlaylistById(id));
@@ -12,10 +12,6 @@ const playlistQuery = reactive(useGetSpotifyPlaylistById(id));
 
 <template>
   <div>
-    <RouterLink to="/spotify-playlists">
-      Playlists
-    </RouterLink>
-
     <p>Playlist {{ playlistQuery.data?.name }} id: {{ id }}</p>
 
     <div v-if="playlistQuery.isLoading">

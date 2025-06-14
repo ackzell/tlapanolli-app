@@ -7,7 +7,7 @@ import router from '@/router';
 onMounted(async () => {
   try {
     await spotifySdk.authenticate();
-    router.push('/spotify-playlists');
+    router.push('/spotify');
   }
   catch (error) {
     console.error(error);

@@ -97,28 +97,30 @@ function logOut() {
         Sorted by: {{ sortBy }}
       </p>
 
-      <ul flex flex-wrap gap-4>
+      <ul mt-4 flex flex-wrap gap-4>
         <li
           v-for="playlist in playlists" :key="playlist.id"
-          class="p-4 border-1 border-neutral-700 rounded-md flex gap-2 min-w-[20rem]"
+          class="p-2 border-1 border-neutral-700 rounded-md flex gap-2"
         >
           <img class="h-auto w-12 object-contain" :src="playlist.images?.[0]?.url" :alt="playlist.name">
           <div lex flex-col justify-center>
-            <p text-green>
+            <h2 text-green-100>
               {{ playlist.name }}
-            </p>
+            </h2>
             <p>
               {{ playlist.tracks?.total }} tracks
             </p>
             <RouterLink
               :to="{
-                name: '/spotify-playlists/[id]',
+                name: '/spotify/playlists/[id]',
                 params: {
                   id: playlist.id,
                 },
               }"
+              hover:text-green
             >
-              {{ playlist.id }}
+              View Playlist
+              <div class="i-tabler:arrow-right?mask" />
             </RouterLink>
           </div>
         </li>
