@@ -97,32 +97,34 @@ function logOut() {
         Sorted by: {{ sortBy }}
       </p>
 
-      <ul mt-4 flex flex-wrap gap-4>
+      <ul mt-4>
         <li
           v-for="playlist in playlists" :key="playlist.id"
-          class="p-2 border-1 border-neutral-700 rounded-md flex gap-2"
         >
-          <img class="h-auto w-12 object-contain" :src="playlist.images?.[0]?.url" :alt="playlist.name">
-          <div lex flex-col justify-center>
-            <h2 text-green-100>
-              {{ playlist.name }}
-            </h2>
-            <p>
-              {{ playlist.tracks?.total }} tracks
-            </p>
-            <RouterLink
-              :to="{
-                name: '/spotify/playlists/[id]',
-                params: {
-                  id: playlist.id,
-                },
-              }"
-              hover:text-green
-            >
-              View Playlist
-              <div class="i-tabler:arrow-right?mask" />
-            </RouterLink>
-          </div>
+          <RouterLink
+            :to="{
+              name: '/spotify/playlists/[id]',
+              params: {
+                id: playlist.id,
+              },
+            }"
+            class="group"
+            my-1 p-2
+            border-1 border-neutral-700
+            rounded-md
+            h-full w-full
+            block
+          >
+            <div flex gap-2>
+              <img class="h-auto w-5 object-contain" :src="playlist.images?.[0]?.url" :alt="playlist.name">
+              <h2 text-green-200 group-hover:text-white>
+                {{ playlist.name }}
+              </h2>
+              <p group-hover:text-green>
+                {{ playlist.tracks?.total }} tracks
+              </p>
+            </div>
+          </RouterLink>
         </li>
       </ul>
     </div>
@@ -132,3 +134,14 @@ function logOut() {
     </div>
   </div>
 </template>
+
+<style scoped>
+.group {
+  transition: border-color 0.3s ease-in;
+}
+
+.group:hover {
+  border-color: greenyellow; /* glow color */
+  box-shadow: 0 0 10px rgba(86, 215, 0, 0.5); /* glow effect */
+}
+</style>
