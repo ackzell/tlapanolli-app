@@ -19,9 +19,9 @@ const route = useRoute();
         </RouterLink>
       </div>
     </nav>
-
-    <RouterView />
   </header>
+
+  <RouterView />
 </template>
 
 <style scoped>

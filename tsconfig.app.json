@@ -7,6 +7,11 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "./typed-router.d.ts"],
+  "include": [
+    "env.d.ts",
+    "src/**/*",
+    "src/**/*.vue",
+    "src/types/directives.d.ts"
+  ],
   "exclude": ["src/**/__tests__/*"]
 }

@@ -3,6 +3,8 @@ import { createPinia } from 'pinia';
 import 'virtual:uno.css';
 import { createApp } from 'vue';
 
+import { vSiblingFocus } from '@/directives/siblingFocus';
+
 import App from './App.vue';
 import './assets/main.css';
 import router from './router';
@@ -19,5 +21,7 @@ app.use(PiniaColada, {
     gcTime: 300_000, // 5 minutes, the default
   },
 });
+
+app.directive('sibling-focus', vSiblingFocus);
 
 app.mount('#app');

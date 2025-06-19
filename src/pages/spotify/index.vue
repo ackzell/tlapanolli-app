@@ -5,6 +5,8 @@ import { spotifySdk } from '@/lib/spotifyClient';
 import { useGetSpotifyPlaylists } from '@/queries/useGetSpotifyPlaylists';
 import router from '@/router';
 
+import PlaylistSelector from './playlists/components/PlaylistSelector.vue';
+
 // this triggers spotify log in
 // because the query is using the spotify sdk
 // so when the sdk doesn't find a user,
@@ -59,29 +61,30 @@ function logOut() {
 
 <template>
   <div>
-    <p>This will only get the first page available for now</p>
+    <div>
+      <p>This will only get the first page available for now</p>
+      <section flex gap-2>
+        <button btn @click="getMyPlaylists">
+          Get my playlists
+        </button>
 
-    <section flex gap-2>
-      <button btn @click="getMyPlaylists">
-        Get my playlists
-      </button>
+        <button btn @click="sortByName">
+          Sort by name
+        </button>
 
-      <button btn @click="sortByName">
-        Sort by name
-      </button>
+        <button btn @click="sortByTracks">
+          Sort by number of tracks
+        </button>
 
-      <button btn @click="sortByTracks">
-        Sort by number of tracks
-      </button>
+        <button btn @click="clearSort">
+          Clear sort
+        </button>
 
-      <button btn @click="clearSort">
-        Clear sort
-      </button>
-
-      <button bg-slate btn @click="logOut">
-        Log out Spotify
-      </button>
-    </section>
+        <button bg-slate btn @click="logOut">
+          Log out Spotify
+        </button>
+      </section>
+    </div>
 
     <div v-if="playlistsQuery.isLoading">
       Fetching user's playlists
@@ -97,36 +100,7 @@ function logOut() {
         Sorted by: {{ sortBy }}
       </p>
 
-      <ul mt-4>
-        <li
-          v-for="playlist in playlists" :key="playlist.id"
-        >
-          <RouterLink
-            :to="{
-              name: '/spotify/playlists/[id]',
-              params: {
-                id: playlist.id,
-              },
-            }"
-            class="group"
-            my-1 p-2
-            border-1 border-neutral-700
-            rounded-md
-            h-full w-full
-            block
-          >
-            <div flex gap-2>
-              <img class="h-auto w-5 object-contain" :src="playlist.images?.[0]?.url" :alt="playlist.name">
-              <h2 text-green-200 group-hover:text-white>
-                {{ playlist.name }}
-              </h2>
-              <p group-hover:text-green>
-                {{ playlist.tracks?.total }} tracks
-              </p>
-            </div>
-          </RouterLink>
-        </li>
-      </ul>
+      <PlaylistSelector :playlists="playlists" />
     </div>
 
     <div v-else-if="!playlistsQuery.isLoading && !playlistsQuery.error">
@@ -134,14 +108,3 @@ function logOut() {
     </div>
   </div>
 </template>
-
-<style scoped>
-.group {
-  transition: border-color 0.3s ease-in;
-}
-
-.group:hover {
-  border-color: greenyellow; /* glow color */
-  box-shadow: 0 0 10px rgba(86, 215, 0, 0.5); /* glow effect */
-}
-</style>
