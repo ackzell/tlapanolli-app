@@ -2,10 +2,9 @@
 import { computed, reactive, ref } from 'vue';
 
 import { spotifySdk } from '@/lib/spotifyClient';
+import PlaylistSelector from '@/pages/spotify/playlists/components/PlaylistSelector.vue';
 import { useGetSpotifyPlaylists } from '@/queries/useGetSpotifyPlaylists';
 import router from '@/router';
-
-import PlaylistSelector from './playlists/components/PlaylistSelector.vue';
 
 // this triggers spotify log in
 // because the query is using the spotify sdk
@@ -100,7 +99,17 @@ function logOut() {
         Sorted by: {{ sortBy }}
       </p>
 
-      <PlaylistSelector :playlists="playlists" />
+      <div class="spotify-stuff-container">
+        <div flex flex-grow flex-basis-0 gap-4 h-full>
+          <div flex-1 h-full overflow-auto>
+            <PlaylistSelector :playlists="playlists" />
+          </div>
+
+          <div flex-1 h-full overflow-auto>
+            <RouterView />
+          </div>
+        </div>
+      </div>
     </div>
 
     <div v-else-if="!playlistsQuery.isLoading && !playlistsQuery.error">
@@ -108,3 +117,17 @@ function logOut() {
     </div>
   </div>
 </template>
+
+<style scoped>
+.spotify-stuff-container {
+  /*
+    2rem - padding top
+    35px - nav tabs
+    56px - nav header
+    24px - "my playlists"
+    2rem - padding bottom
+   */
+  height: calc(100vh - 2rem - 35px - 56px - 24px - 2rem);
+  min-height: 4rem;
+}
+</style>

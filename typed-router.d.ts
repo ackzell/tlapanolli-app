@@ -20,10 +20,10 @@ declare module 'vue-router/auto-routes' {
   export interface RouteNamedMap {
     '/': RouteRecordInfo<'/', '/', Record<never, never>, Record<never, never>>,
     '/about': RouteRecordInfo<'/about', '/about', Record<never, never>, Record<never, never>>,
-    '/spotify/': RouteRecordInfo<'/spotify/', '/spotify', Record<never, never>, Record<never, never>>,
+    '/spotify/(spotify)': RouteRecordInfo<'/spotify/(spotify)', '/spotify', Record<never, never>, Record<never, never>>,
     '/spotify/callback': RouteRecordInfo<'/spotify/callback', '/spotify/callback', Record<never, never>, Record<never, never>>,
+    '/spotify/playlists': RouteRecordInfo<'/spotify/playlists', '/spotify/playlists', Record<never, never>, Record<never, never>>,
     '/spotify/playlists/[id]': RouteRecordInfo<'/spotify/playlists/[id]', '/spotify/playlists/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
-    '/spotify/playlists/components/PlaylistSelector': RouteRecordInfo<'/spotify/playlists/components/PlaylistSelector', '/spotify/playlists/components/PlaylistSelector', Record<never, never>, Record<never, never>>,
     '/tidal/': RouteRecordInfo<'/tidal/', '/tidal', Record<never, never>, Record<never, never>>,
     '/tidal/callback': RouteRecordInfo<'/tidal/callback', '/tidal/callback', Record<never, never>, Record<never, never>>,
   }

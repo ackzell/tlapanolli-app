@@ -3,6 +3,7 @@ import type { SimplifiedPlaylist } from '@spotify/web-api-ts-sdk';
 
 import { onKeyStroke } from '@vueuse/core';
 import { onMounted } from 'vue';
+import { RouterLink } from 'vue-router';
 
 const props = defineProps<{ playlists: SimplifiedPlaylist[] }>();
 
@@ -88,62 +89,42 @@ onMounted(() => {
 </script>
 
 <template>
-  <!-- make it 60% of the available height -->
-
-  <div class="playlist-container" p-2 flex flex-col>
-    <ul
-      v-sibling-focus="{
-        maxSiblings: 3,
-        enableMultiple: true,
-        prioritizeFocus: true,
-        clearHoverOnKeyboard: true,
-      }" flex-grow flex-basis-0 overflow-y-auto
+  <ul
+    v-sibling-focus="{
+      maxSiblings: 3,
+      enableMultiple: true,
+      prioritizeFocus: true,
+      clearHoverOnKeyboard: true,
+    }"
+  >
+    <li
+      v-for="playlist in props.playlists" :key="playlist.id"
     >
-      <li
-        v-for="playlist in props.playlists" :key="playlist.id"
+      <RouterLink
+        :to="{
+          name: '/spotify/playlists/[id]',
+          params: { id: playlist.id },
+        }"
+        class="group spotify-playlist my-1 p-2 border-1 border-neutral-700 rounded-md h-full w-full block"
       >
-        <RouterLink
-          :to="{
-            name: '/spotify/playlists/[id]',
-            params: {
-              id: playlist.id,
-            },
-          }"
-          class="group spotify-playlist"
-
-          my-1 p-2
-          border-1 border-neutral-700
-          rounded-md
-          h-full w-full block
-        >
-          <div flex gap-2>
-            <img class="h-auto w-5 object-contain" :src="playlist.images?.[0]?.url" :alt="playlist.name">
-            <h2 group-focus:text-white group-hover:text-white>
-              {{ playlist.name }}
-            </h2>
-            <p group-focus:text-green group-hover:text-green>
-              {{ playlist.tracks?.total }} tracks
-            </p>
-          </div>
-        </RouterLink>
-      </li>
-    </ul>
-  </div>
+        <div flex gap-2>
+          <img
+            class="h-auto w-5 object-contain filter-grayscale-100 group-focus:filter-none group-hover:filter-none"
+            :src="playlist.images?.[0]?.url" :alt="playlist.name"
+          >
+          <h2 group-focus:text-white group-hover:text-white>
+            {{ playlist.name }}
+          </h2>
+          <p group-focus:text-green group-hover:text-green>
+            {{ playlist.tracks?.total }} tracks
+          </p>
+        </div>
+      </RouterLink>
+    </li>
+  </ul>
 </template>
 
 <style scoped>
-.playlist-container {
-  /*
-    2rem - padding top
-    35px - nav tabs
-    56px - nav header
-    24px - "my playlists"
-    2rem - padding bottom
-   */
-  height: calc(100vh - 2rem - 35px - 56px - 24px - 2rem);
-  min-height: 4rem;
-}
-
 .group {
   transition: border-color  0.35s ease-in;
 }

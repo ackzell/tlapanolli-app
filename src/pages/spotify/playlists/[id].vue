@@ -1,32 +1,36 @@
 <script lang="ts" setup>
-import { reactive } from 'vue';
+import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 
 import { useGetSpotifyPlaylistById } from '@/queries/useGetSpotifyPlaylistById';
 
 const route = useRoute('/spotify/playlists/[id]');
-const id = route.params.id;
+const id = computed(() => route.params.id as string);
 
-const playlistQuery = reactive(useGetSpotifyPlaylistById(id));
+const {
+  data: playlistData,
+  isLoading: isPlaylistLoading,
+  error: playlistError,
+} = useGetSpotifyPlaylistById(id);
 </script>
 
 <template>
   <div>
-    <p>Playlist {{ playlistQuery.data?.name }} id: {{ id }}</p>
+    <p>Playlist {{ playlistData?.name }} id: {{ id }}</p>
 
-    <div v-if="playlistQuery.isLoading">
+    <div v-if="isPlaylistLoading">
       Fetching playlist
     </div>
 
-    <div v-if="playlistQuery.error">
-      Error: {{ playlistQuery.error }}
+    <div v-if="playlistError">
+      Error: {{ playlistError }}
     </div>
 
-    <div v-if="playlistQuery.data">
+    <div v-if="playlistData">
       <p>Tracks: </p>
 
       <ul>
-        <li v-for="track in playlistQuery.data.tracks.items" :key="track.track.id">
+        <li v-for="track in playlistData.tracks.items" :key="track.track.id">
           <span text-green-400>
             {{ track.track.name }}
           </span> -
