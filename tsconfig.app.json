@@ -11,6 +11,7 @@
     "env.d.ts",
     "src/**/*",
     "src/**/*.vue",
+    "./typed-router.d.ts",
     "src/types/directives.d.ts"
   ],
   "exclude": ["src/**/__tests__/*"]
