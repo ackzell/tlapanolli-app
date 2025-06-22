@@ -112,10 +112,10 @@ onMounted(() => {
             class="h-auto w-5 object-contain filter-grayscale-100 group-focus:filter-none group-hover:filter-none"
             :src="playlist.images?.[0]?.url" :alt="playlist.name"
           >
-          <h2 group-focus:text-white group-hover:text-white>
+          <h2>
             {{ playlist.name }}
           </h2>
-          <p group-focus:text-green group-hover:text-green>
+          <p>
             {{ playlist.tracks?.total }} tracks
           </p>
         </div>
@@ -130,6 +130,27 @@ onMounted(() => {
 }
 
 /* TODO: make the colors dynamic */
+
+/* Only apply hover/focus styles to p and p when NOT active */
+.group.spotify-playlist:not(.router-link-active):not(.router-link-exact-active):hover p,
+.group.spotify-playlist:not(.router-link-active):not(.router-link-exact-active):focus-visible p {
+  color: var(--colors-green-DEFAULT);
+}
+
+/* Only apply hover/focus styles to p and p when NOT active */
+.group.spotify-playlist:not(.router-link-active):not(.router-link-exact-active):hover h2,
+.group.spotify-playlist:not(.router-link-active):not(.router-link-exact-active):focus-visible h2 {
+  color: var(--vt-c-white);
+}
+
+.group.spotify-playlist.router-link-active,
+.group.spotify-playlist.router-link-exact-active,
+.group.spotify-playlist.router-link-active:hover,
+.group.spotify-playlist.router-link-exact-active:hover {
+  border-color: var(--colors-green-DEFAULT); /* glow color */
+  background-color: var(--colors-green-DEFAULT); /* background color */
+  color: var(--vt-c-black);
+}
 
 .group:focus-visible,
 .group:hover {

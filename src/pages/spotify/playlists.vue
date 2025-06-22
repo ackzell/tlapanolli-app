@@ -36,22 +36,6 @@ const playlists = computed(() => {
   return items;
 });
 
-async function getMyPlaylists() {
-  await playlistsQuery.refresh();
-}
-
-function sortByName() {
-  sortBy.value = 'name';
-}
-
-function sortByTracks() {
-  sortBy.value = 'tracks';
-}
-
-function clearSort() {
-  sortBy.value = 'none';
-}
-
 function logOut() {
   spotifySdk.logOut();
   router.push('/');
@@ -63,19 +47,21 @@ function logOut() {
     <div>
       <p>This will only get the first page available for now</p>
       <section flex gap-2>
-        <button btn @click="getMyPlaylists">
+        <button
+          btn @click="async () => await playlistsQuery.refresh()"
+        >
           Get my playlists
         </button>
 
-        <button btn @click="sortByName">
+        <button btn @click="sortBy = 'name';">
           Sort by name
         </button>
 
-        <button btn @click="sortByTracks">
+        <button btn @click="sortBy = 'tracks';">
           Sort by number of tracks
         </button>
 
-        <button btn @click="clearSort">
+        <button btn @click="sortBy = 'none';">
           Clear sort
         </button>
 

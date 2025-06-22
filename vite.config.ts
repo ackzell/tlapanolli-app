@@ -11,7 +11,7 @@ export default defineConfig({
     UnoCSS(),
     VueRouter({
       /* options */
-      exclude: ['**/components/*'],
+      exclude: ['**/components/*', '**/composables/*'],
     }),
     vue(),
     vueDevTools(),
