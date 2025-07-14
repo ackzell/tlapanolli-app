@@ -89,7 +89,7 @@ function logOut() {
 
       <div class="spotify-stuff-container">
         <div flex flex-grow flex-basis-0 gap-4 h-full>
-          <div flex-1 h-full overflow-auto>
+          <div flex-1 h-full>
             <PlaylistSelector :playlists="playlists" />
           </div>
 

@@ -126,7 +126,7 @@ onMounted(() => {
 
 <style scoped>
 .group {
-  transition: border-color  0.35s ease-in;
+  transition: all  0.35s ease-in;
 }
 
 /* TODO: make the colors dynamic */
@@ -156,6 +156,7 @@ onMounted(() => {
 .group:hover {
   border-color: var(--colors-green-DEFAULT); /* glow color */
   box-shadow: 0 0 8px oklch(0.792 0.209 151.711 ); /* glow effect */
+  scale: 1.04;
 }
 
 .group:focus-visible {
@@ -164,17 +165,21 @@ onMounted(() => {
 
 .group.spotify-playlist.prev-sibling-1 {
   border-color: oklch(0.792 0.209 151.711/0.4);
+  scale: 1.02;
 }
 
 .group.spotify-playlist.prev-sibling-2 {
   border-color: oklch(0.792 0.209 151.711/0.2);
+  scale: 1.01;
 }
 
 .group.spotify-playlist.next-sibling-2 {
   border-color: oklch(0.792 0.209 151.711/0.2);
+  scale: 1.01;
 }
 
 .group.spotify-playlist.next-sibling-1 {
   border-color: oklch(0.792 0.209 151.711/0.4);
+  scale: 1.02;
 }
 </style>
