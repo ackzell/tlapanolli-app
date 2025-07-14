@@ -1,26 +1,30 @@
-<script lang="ts" setup>
-import { computed, reactive, ref } from 'vue';
-
+<script lang="ts">
+import { computed, ref } from 'vue';
 import { spotifySdk } from '@/lib/spotifyClient';
+
 import PlaylistSelector from '@/pages/spotify/playlists/components/PlaylistSelector.vue';
-import { useGetSpotifyPlaylists } from '@/queries/useGetSpotifyPlaylists';
 import router from '@/router';
+import { useSpotifyPlaylistsLoader } from './playlists/loaders/playlists.loader';
+
+export { useSpotifyPlaylistsLoader };
+</script>
+
+<script setup lang="ts">
+type SortType = 'none' | 'name' | 'tracks';
+const sortBy = ref<SortType>('none');
 
 // this triggers spotify log in
 // because the query is using the spotify sdk
 // so when the sdk doesn't find a user,
 // it will redirect to the login page
-const playlistsQuery = reactive(useGetSpotifyPlaylists());
-
-type SortType = 'none' | 'name' | 'tracks';
-
-const sortBy = ref<SortType>('none');
+const playlistsQuery = useSpotifyPlaylistsLoader();
+// console.log('playlistsQuery', playlistsQuery);
 
 /**
  * A derived value that allows to sort the playlists
  */
 const playlists = computed(() => {
-  const items = playlistsQuery.data?.items || [];
+  const items = playlistsQuery.data.value?.items || [];
 
   if (sortBy.value === 'name') {
     return [...items].sort((a, b) => a.name.localeCompare(b.name));
@@ -47,9 +51,7 @@ function logOut() {
     <div>
       <p>This will only get the first page available for now</p>
       <section flex gap-2>
-        <button
-          btn @click="async () => await playlistsQuery.refresh()"
-        >
+        <button btn @click="async () => await playlistsQuery.refresh()">
           Get my playlists
         </button>
 
@@ -115,5 +117,6 @@ function logOut() {
    */
   height: calc(100vh - 2rem - 35px - 56px - 24px - 2rem);
   min-height: 4rem;
+
 }
 </style>

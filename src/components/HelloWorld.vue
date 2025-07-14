@@ -1,7 +1,15 @@
+<script lang="ts">
+import { useActiveElement } from '@vueuse/core';
+</script>
+
 <script setup lang="ts">
 defineProps<{
   msg: string;
 }>();
+
+const activeElement = useActiveElement();
+
+console.log('Active Element:', activeElement.value);
 </script>
 
 <template>
@@ -35,6 +43,7 @@ h3 {
 }
 
 @media (min-width: 1024px) {
+
   .greetings h1,
   .greetings h3 {
     text-align: left;

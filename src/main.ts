@@ -1,17 +1,20 @@
 import { PiniaColada } from '@pinia/colada';
 import { createPinia } from 'pinia';
-import 'virtual:uno.css';
+
+import { DataLoaderPlugin } from 'unplugin-vue-router/data-loaders';
 import { createApp } from 'vue';
 
 import { vSiblingFocus } from '@/directives/siblingFocus';
 
 import App from './App.vue';
-import './assets/main.css';
 import router from './router';
+import 'virtual:uno.css';
+import './assets/main.css';
 
 const app = createApp(App);
 const pinia = createPinia();
 
+app.use(DataLoaderPlugin, { router });
 app.use(router);
 
 app.use(pinia);

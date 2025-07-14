@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { createAPIClient } from '@tidal-music/api';
-import { credentialsProvider, finalizeLogin, init } from '@tidal-music/auth';
-import { onMounted, ref } from 'vue';
+import { credentialsProvider, finalizeLogin } from '@tidal-music/auth';
+import { onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
 import { initTidal } from '@/lib/tidalClient';
