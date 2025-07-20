@@ -1,30 +1,39 @@
 <script lang="ts">
+import { defineColadaLoader } from 'unplugin-vue-router/data-loaders/pinia-colada';
 import { computed, ref } from 'vue';
-import { spotifySdk } from '@/lib/spotifyClient';
 
+import { spotifySdk } from '@/lib/spotifyClient';
 import PlaylistSelector from '@/pages/spotify/playlists/components/PlaylistSelector.vue';
 import router from '@/router';
-import { useSpotifyPlaylistsLoader } from './playlists/loaders/playlists.loader';
 
-export { useSpotifyPlaylistsLoader };
+export const useSpotifyPlaylistsLoader = defineColadaLoader('/spotify/playlists', {
+  async query() {
+    const result = await spotifySdk.currentUser.playlists.playlists();
+    // console.log(result);
+    return result;
+  },
+  key: ['spotifyPlaylists'],
+  staleTime: 24 * 60 * 60 * 1000, // 1 day
+});
 </script>
 
 <script setup lang="ts">
 type SortType = 'none' | 'name' | 'tracks';
+
 const sortBy = ref<SortType>('none');
 
-// this triggers spotify log in
-// because the query is using the spotify sdk
-// so when the sdk doesn't find a user,
-// it will redirect to the login page
-const playlistsQuery = useSpotifyPlaylistsLoader();
-// console.log('playlistsQuery', playlistsQuery);
+const {
+  data: playlistsData,
+  error: playlistsError,
+  isLoading: playlistIsLoading,
+  refresh: playlistsRefreh,
+} = useSpotifyPlaylistsLoader();
 
 /**
  * A derived value that allows to sort the playlists
  */
 const playlists = computed(() => {
-  const items = playlistsQuery.data.value?.items || [];
+  const items = playlistsData.value?.items || [];
 
   if (sortBy.value === 'name') {
     return [...items].sort((a, b) => a.name.localeCompare(b.name));
@@ -50,8 +59,9 @@ function logOut() {
   <div>
     <div>
       <p>This will only get the first page available for now</p>
+
       <section flex gap-2>
-        <button btn @click="async () => await playlistsQuery.refresh()">
+        <button btn @click="async () => await playlistsRefreh()">
           Get my playlists
         </button>
 
@@ -73,12 +83,12 @@ function logOut() {
       </section>
     </div>
 
-    <div v-if="playlistsQuery.isLoading">
+    <div v-if="playlistIsLoading">
       Fetching user's playlists
     </div>
 
-    <div v-if="playlistsQuery.error">
-      Error: {{ playlistsQuery.error }}
+    <div v-if="playlistsError">
+      Error: {{ playlistsError }}
     </div>
 
     <div v-if="playlists.length > 0">
@@ -89,18 +99,20 @@ function logOut() {
 
       <div class="spotify-stuff-container">
         <div flex flex-grow flex-basis-0 gap-4 h-full>
-          <div flex-1 h-full>
-            <PlaylistSelector :playlists="playlists" />
+          <div p-3 flex-1 h-full overflow-y-scroll>
+            <PlaylistSelector
+              :playlists="playlists"
+            />
           </div>
 
-          <div flex-1 h-full overflow-auto>
+          <div flex-1 h-full>
             <RouterView />
           </div>
         </div>
       </div>
     </div>
 
-    <div v-else-if="!playlistsQuery.isLoading && !playlistsQuery.error">
+    <div v-else-if="!playlistIsLoading && !playlistsError">
       No playlists found. Click "Get my playlists" to fetch them.
     </div>
   </div>
@@ -117,6 +129,5 @@ function logOut() {
    */
   height: calc(100vh - 2rem - 35px - 56px - 24px - 2rem);
   min-height: 4rem;
-
 }
 </style>

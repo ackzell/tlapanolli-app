@@ -169,12 +169,12 @@ onMounted(() => {
 }
 
 .group.spotify-playlist.prev-sibling-2 {
-  border-color: oklch(0.792 0.209 151.711/0.2);
+  border-color: oklch(0.792 0.209 151.711/0.3);
   scale: 1.01;
 }
 
 .group.spotify-playlist.next-sibling-2 {
-  border-color: oklch(0.792 0.209 151.711/0.2);
+  border-color: oklch(0.792 0.209 151.711/0.3);
   scale: 1.01;
 }
 
