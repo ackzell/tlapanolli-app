@@ -34,7 +34,7 @@ const {
     </div>
 
     <div v-if="!isPlaylistLoading && playlistData" flex flex-col gap-2 items-start>
-      <div flex flex-col h-70 w-full items-center justify-around>
+      <div p-4 flex flex-col h-70 w-full items-center justify-around>
         <p text-center>
           Playlist {{ playlistData?.name }} id: {{ playlistData?.id }}
         </p>
@@ -47,22 +47,34 @@ const {
 
       <p>Tracks: </p>
       <div p-4 flex-1 overflow-auto class="playlist-container">
-        <ul>
+        <ul
+          v-kbd-trap.roving.vertical
+          v-sibling-focus="{
+            maxSiblings: 2,
+            itemSelector: 'div',
+          }"
+        >
           <li v-for="track in playlistData.tracks.items" :key="track.track.id" class="group spotify-track">
-            <span class="text-green-400">
-              {{ track.track.name }}
-            </span> -
-            <span class="text-gray-100">
-              {{ track.track.album.name }}
-            </span> -
-            <span class="text-amber">
-              {{ track.track.album.artists[0].name }}
-            </span>
-            {{ new Date(track.track.album.release_date).toLocaleDateString('en-US', {
-              day: '2-digit',
-              month: 'short',
-              year: 'numeric',
-            }) }}
+            <div
+              class="group spotify-track"
+              my-1 p-2 border-1 border-neutral-700 rounded-md h-full w-full block
+              tabindex="0"
+            >
+              <span class="text-green-400">
+                {{ track.track.name }}
+              </span> -
+              <span class="text-gray-100">
+                {{ track.track.album.name }}
+              </span> -
+              <span class="text-amber">
+                {{ track.track.album.artists[0].name }}
+              </span>
+              {{ new Date(track.track.album.release_date).toLocaleDateString('en-US', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric',
+              }) }}
+            </div>
           </li>
         </ul>
       </div>
@@ -83,5 +95,42 @@ const {
     2rem - padding bottom
    */
   max-height: calc(100vh - 2rem - 35px - 56px - 24px - 280px - 24px - 16px - 2rem);
+}
+
+.group {
+  transition: all  0.35s ease-in;
+}
+
+/* TODO: make the colors dynamic */
+
+.group:focus-visible,
+.group:hover {
+  border-color: var(--colors-green-DEFAULT); /* glow color */
+  box-shadow: 0 0 8px oklch(0.792 0.209 151.711 ); /* glow effect */
+  scale: 1.03;
+}
+
+.group:focus-visible {
+  outline: none;
+}
+
+.group.spotify-track.prev-sibling-1 {
+  border-color: oklch(0.792 0.209 151.711/0.4);
+  scale: 1.02;
+}
+
+.group.spotify-track.prev-sibling-2 {
+  border-color: oklch(0.792 0.209 151.711/0.3);
+  scale: 1.01;
+}
+
+.group.spotify-track.next-sibling-2 {
+  border-color: oklch(0.792 0.209 151.711/0.3);
+  scale: 1.01;
+}
+
+.group.spotify-track.next-sibling-1 {
+  border-color: oklch(0.792 0.209 151.711/0.4);
+  scale: 1.02;
 }
 </style>

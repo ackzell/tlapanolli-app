@@ -2,99 +2,24 @@
 import type { SimplifiedPlaylist } from '@spotify/web-api-ts-sdk';
 
 import { onKeyStroke } from '@vueuse/core';
-import { onMounted } from 'vue';
 import { RouterLink } from 'vue-router';
 
 const props = defineProps<{ playlists: SimplifiedPlaylist[] }>();
 
-function focusFirstPlaylist() {
-  const firstPlaylist = document.querySelector('.spotify-playlist') as HTMLElement;
-  if (firstPlaylist) {
-    firstPlaylist.focus();
-  }
-}
-
-function focusNextPlaylist(element: HTMLElement) {
-  // the active element is an anchor
-  // so we need to go up one level, to a li element
-  // and then focus the next sibling
-  const parent = element.parentElement as HTMLElement;
-  if (parent) {
-    const nextSibling = parent.nextElementSibling as HTMLElement;
-    if (nextSibling) {
-      // now go into the anchor tag again
-      // and focus the next sibling
-      const anchor = nextSibling.querySelector('a') as HTMLElement;
-      if (anchor) {
-        anchor.focus();
-      }
-    }
-  }
-}
-
-function focusPreviousPlaylist(element: HTMLElement) {
-  // the active element is an anchor
-  // so we need to go up one level, to a li element
-  // and then focus the next sibling
-  const parent = element.parentElement as HTMLElement;
-  if (parent) {
-    const prevSibling = parent.previousElementSibling as HTMLElement;
-    if (prevSibling) {
-      // now go into the anchor tag again
-      // and focus the next sibling
-      const anchor = prevSibling.querySelector('a') as HTMLElement;
-      if (anchor) {
-        anchor.focus();
-      }
-    }
-  }
-}
-
-onKeyStroke(['ArrowDown', 'ArrowUp'], (e) => {
-  e.preventDefault();
-  const activeElement = document.activeElement as HTMLElement;
-  if (!activeElement.classList.contains('spotify-playlist')) {
-    focusFirstPlaylist();
-  }
-});
-
-onKeyStroke('ArrowDown', (e) => {
-  e.preventDefault();
-  const activeElement = document.activeElement as HTMLElement;
-  if (activeElement) {
-    focusNextPlaylist(activeElement);
-  }
-});
-
-onKeyStroke('ArrowUp', (e) => {
-  e.preventDefault();
-  const activeElement = document.activeElement as HTMLElement;
-  if (activeElement) {
-    focusPreviousPlaylist(activeElement);
-  }
-});
-
-onKeyStroke('ArrowRight', (e) => {
+onKeyStroke([' '], (e) => {
   e.preventDefault();
   const activeElement = document.activeElement as HTMLElement;
   if (activeElement) {
     activeElement.click();
   }
 });
-
-onMounted(() => {
-  // focus on the first playlist
-  focusFirstPlaylist();
-});
 </script>
 
 <template>
   <ul
+    v-kbd-trap.roving.vertical
     v-sibling-focus="{
-      maxSiblings: 3,
-      enableMultiple: true,
-      prioritizeFocus: true,
-      clearHoverOnKeyboard: true,
+      maxSiblings: 2,
     }"
   >
     <li
@@ -105,11 +30,12 @@ onMounted(() => {
           name: '/spotify/playlists/[id]',
           params: { id: playlist.id },
         }"
-        class="group spotify-playlist my-1 p-2 border-1 border-neutral-700 rounded-md h-full w-full block"
+        class="spotify-playlist group"
+        my-1 p-2 border-1 border-neutral-700 rounded-md h-full w-full block
       >
         <div flex gap-2>
           <img
-            class="h-auto w-5 object-contain filter-grayscale-100 group-focus:filter-none group-hover:filter-none"
+            h-auto w-5 object-contain filter-grayscale-100 group-focus:filter-none group-hover:filter-none
             :src="playlist.images?.[0]?.url" :alt="playlist.name"
           >
           <h2>

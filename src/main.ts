@@ -1,11 +1,13 @@
+import VueKeyboardTrapDirectivePlugin from '@pdanpdan/vue-keyboard-trap';
+
 import { PiniaColada } from '@pinia/colada';
 import { createPinia } from 'pinia';
 
 import { DataLoaderPlugin } from 'unplugin-vue-router/data-loaders';
+
 import { createApp } from 'vue';
 
 import { vSiblingFocus } from '@/directives/siblingFocus';
-
 import App from './App.vue';
 import router from './router';
 import 'virtual:uno.css';
@@ -26,5 +28,7 @@ app.use(PiniaColada, {
 });
 
 app.directive('sibling-focus', vSiblingFocus);
+
+app.use(VueKeyboardTrapDirectivePlugin, {});
 
 app.mount('#app');

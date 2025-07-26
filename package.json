@@ -16,6 +16,7 @@
     "dev:nw": "nw ./dist"
   },
   "dependencies": {
+    "@pdanpdan/vue-keyboard-trap": "^1.2.0",
     "@pinia/colada": "^0.16.1",
     "@spotify/web-api-ts-sdk": "^1.2.0",
     "@tidal-music/api": "^0.2.0",

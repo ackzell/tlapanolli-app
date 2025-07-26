@@ -1,8 +1,8 @@
 <script lang="ts">
 import { defineColadaLoader } from 'unplugin-vue-router/data-loaders/pinia-colada';
 import { computed, ref } from 'vue';
-
 import { spotifySdk } from '@/lib/spotifyClient';
+
 import PlaylistSelector from '@/pages/spotify/playlists/components/PlaylistSelector.vue';
 import router from '@/router';
 
@@ -98,14 +98,23 @@ function logOut() {
       </p>
 
       <div class="spotify-stuff-container">
-        <div flex flex-grow flex-basis-0 gap-4 h-full>
-          <div p-3 flex-1 h-full overflow-y-scroll>
+        <div
+          v-kbd-trap.roving.horizontal
+          flex flex-grow flex-basis-0 gap-4 h-full
+        >
+          <div
+            v-kbd-trap.roving.vertical
+            p-3 flex-1 h-full overflow-y-scroll
+          >
             <PlaylistSelector
               :playlists="playlists"
             />
           </div>
 
-          <div flex-1 h-full>
+          <div
+            v-kbd-trap.roving.vertical
+            flex-1 h-full
+          >
             <RouterView />
           </div>
         </div>
