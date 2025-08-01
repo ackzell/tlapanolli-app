@@ -1,29 +1,21 @@
 <script setup lang="ts">
 import type { SimplifiedPlaylist } from '@spotify/web-api-ts-sdk';
 
-import { onKeyStroke } from '@vueuse/core';
 import { RouterLink } from 'vue-router';
 
 const props = defineProps<{ playlists: SimplifiedPlaylist[] }>();
-
-onKeyStroke([' '], (e) => {
-  e.preventDefault();
-  const activeElement = document.activeElement as HTMLElement;
-  if (activeElement) {
-    activeElement.click();
-  }
-});
 </script>
 
 <template>
   <ul
-    v-kbd-trap.roving.vertical
     v-sibling-focus="{
       maxSiblings: 2,
     }"
+    role="listbox" aria-label="Spotify playlists"
   >
     <li
       v-for="playlist in props.playlists" :key="playlist.id"
+      role="option" :aria-selected="$route.name === '/spotify/playlists/[id]' && $route.params.id === playlist.id"
     >
       <RouterLink
         :to="{
@@ -32,6 +24,13 @@ onKeyStroke([' '], (e) => {
         }"
         class="spotify-playlist group"
         my-1 p-2 border-1 border-neutral-700 rounded-md h-full w-full block
+        :autofocus="$route.name === '/spotify/playlists/[id]' && $route.params.id === playlist.id"
+        @keydown="(e: KeyboardEvent) => {
+          if (e.code === 'Space' || e.code === 'Enter') {
+            e.preventDefault();
+            $router.push({ name: '/spotify/playlists/[id]', params: { id: playlist.id } });
+          }
+        }"
       >
         <div flex gap-2>
           <img

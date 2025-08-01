@@ -1,8 +1,9 @@
 <script lang="ts">
 import { defineColadaLoader } from 'unplugin-vue-router/data-loaders/pinia-colada';
-import { computed, ref } from 'vue';
-import { spotifySdk } from '@/lib/spotifyClient';
+import { computed, nextTick, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 
+import { spotifySdk } from '@/lib/spotifyClient';
 import PlaylistSelector from '@/pages/spotify/playlists/components/PlaylistSelector.vue';
 import router from '@/router';
 
@@ -53,6 +54,53 @@ function logOut() {
   spotifySdk.logOut();
   router.push('/');
 }
+
+const leftListRef = ref<HTMLElement>();
+const route = useRoute();
+
+function keepActivePlaylistVisible() {
+  if (!leftListRef.value)
+    return;
+
+  const activePlaylist = leftListRef.value.querySelector('.router-link-exact-active')
+    || leftListRef.value.querySelector('.router-link-active');
+
+  if (activePlaylist) {
+    activePlaylist.scrollIntoView({
+      behavior: 'instant',
+      block: 'center',
+      inline: 'center',
+    });
+  }
+}
+
+function handleFocusMove(event: FocusEvent) {
+  const leftList = leftListRef.value;
+  if (!leftList)
+    return;
+
+  if (leftList.contains(event.target as Node)
+    && event.relatedTarget
+    && !leftList.contains(event.relatedTarget as Node)) {
+    requestAnimationFrame(() => {
+      keepActivePlaylistVisible();
+    });
+
+    setTimeout(() => {
+      keepActivePlaylistVisible();
+    }, 0);
+
+    nextTick(() => {
+      keepActivePlaylistVisible();
+    });
+  }
+}
+
+watch(() => route.params, () => {
+  nextTick(() => {
+    keepActivePlaylistVisible();
+  });
+}, { immediate: true });
 </script>
 
 <template>
@@ -103,8 +151,11 @@ function logOut() {
           flex flex-grow flex-basis-0 gap-4 h-full
         >
           <div
+            ref="leftListRef"
             v-kbd-trap.roving.vertical
             p-3 flex-1 h-full overflow-y-scroll
+            class="playlist-container"
+            @focusout="handleFocusMove"
           >
             <PlaylistSelector
               :playlists="playlists"

@@ -1,5 +1,7 @@
 <script lang="ts">
 import { defineColadaLoader } from 'unplugin-vue-router/data-loaders/pinia-colada';
+import { nextTick, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import { spotifySdk } from '@/lib/spotifyClient';
 
 export const useSpotifyPlaylistByIdLoader = defineColadaLoader('/spotify/playlists/[id]', {
@@ -48,13 +50,14 @@ const {
       <p>Tracks: </p>
       <div p-4 flex-1 overflow-auto class="playlist-container">
         <ul
-          v-kbd-trap.roving.vertical
           v-sibling-focus="{
             maxSiblings: 2,
-            itemSelector: 'div',
+            itemSelector: '.spotify-track',
           }"
+          role="grid"
+          aria-label="Playlist tracks"
         >
-          <li v-for="track in playlistData.tracks.items" :key="track.track.id" class="group spotify-track">
+          <li v-for="(track) in playlistData.tracks.items" :key="track.track.id" role="row">
             <div
               class="group spotify-track"
               my-1 p-2 border-1 border-neutral-700 rounded-md h-full w-full block
